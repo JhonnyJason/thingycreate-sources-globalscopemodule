@@ -1,24 +1,23 @@
 globalscopemodule = {name: "globalscopemodule"}
-
+############################################################
 #region logPrintFunctions
-##############################################################################
 log = (arg) ->
     if allModules.debugmodule.modulesToDebug["globalscopemodule"]?  then console.log "[globalscopemodule]: " + arg
     return
 olog = (o) -> log "\n" + ostr(o)
 ostr = (o) -> JSON.stringify(o, null, 4)
 #endregion
+
+############################################################
+serviceScopePairs = []
+globalScope = {}
+
 ##############################################################################
 globalscopemodule.initialize = () ->
     log "globalscopemodule.initialize"
     return
 
-#region internalProperties
-serviceScopePairs = []
-globalScope = {}
-#endregion
-
-#region internalFunctions
+############################################################
 updateGlobalScope = ->
     log "updateGlobalScope"
     # olog serviceScopePairs
@@ -35,9 +34,10 @@ addToGlobalScope = (service, scope) ->
         if !globalScope[repo]? then globalScope[repo] = service
         else if globalScope[repo].index > service.index
             globalScope[repo] = service
-#endregion
 
+############################################################
 #region exposedFunctions
+############################################################
 globalscopemodule.removeRepoFromServiceScope = (repo, service) ->
     log "globalscopemodule.removeRepoFromServiceScope"
     for pair in serviceScopePairs
@@ -57,6 +57,7 @@ globalscopemodule.addRepoToServiceScope = (repo, service) ->
             updateGlobalScope()
             return
 
+############################################################
 globalscopemodule.addServiceScope = (scope, service) ->
     log "cloudservicemodule.addReposToScope"
     serviceScopePair = {service, scope}
@@ -80,8 +81,10 @@ globalscopemodule.removeServiceFromScope = (service) ->
             return ## we just altered the array
             ## to continue to loop is not a good idea
 
+############################################################
 globalscopemodule.resetScope = updateGlobalScope
 
+############################################################
 #region checkGlobalScope
 globalscopemodule.getAllThingiesInScope = ->
     log "clourservicemodule.getAllThingiesInScope"
